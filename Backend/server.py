@@ -12,7 +12,9 @@ client = MongoClient(
 
 db = client["TreeHacks"]
 
-
+@app.route("/ping")
+def ping():
+    return "Hello World"
 @app.route('/login', methods=['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def index():
@@ -31,4 +33,4 @@ def index():
         return make_response(jsonify({"email": result['email']}), 200)
 
 
-app.run(host='0.0.0.0', port=8000, debug=True)
+app.run(host='0.0.0.0', port=8080, debug=True)
