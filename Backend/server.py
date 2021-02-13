@@ -120,4 +120,25 @@ def requestevent():
         return make_response(jsonify({"Message": "Request Sent"}), 200)
 
 
+@app.route('/eventdecision', methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
+def eventdecision():
+    db_collection = db["req"]
+    user_json = request.get_json()
+
+    # {"event": "123", "decision": "Yes/No"}
+    event = user_json['event']  # event_id
+    decision = user_json['decision']  # Yes/No
+
+    myquery = {"event": event}
+    newvalues = {"$set": {"decision": decision}}
+
+    result = db_collection.update_one(myquery, newvalues)
+
+    if result.matched_count > 0:
+        return make_response(jsonify({"Message": "Request Updated"}), 200)
+    else:
+        return make_response(jsonify({"Error": "Something went wrong"}), 400)
+
+
 app.run(host='0.0.0.0', port=8080, debug=True)
