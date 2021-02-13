@@ -1,8 +1,11 @@
 from pymongo import MongoClient
 from flask import Flask
 from flask import jsonify, make_response, request
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
+
 
 client = MongoClient(
     "mongodb+srv://admin:admin@hacktober.odrlq.mongodb.net/TreeHacks?retryWrites=true&w=majority")
@@ -11,20 +14,21 @@ db = client["TreeHacks"]
 
 
 @app.route('/login', methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
 def index():
+
+    user_json = request.get_json()
+
+    user_email = user_json['user']['email']
+
     db_collection = db["users"]
 
-    if request.method == 'POST':
-        email = request.form['email']
-    else:
-        email = request.args.get('email')
-
-    result = db_collection.find_one({"email": email})
+    result = db_collection.find_one({"email": user_email})
 
     if result is None:
         return make_response(jsonify({"Error": "User Not Found"}), 400)
     else:
-        return make_response(jsonify({"user_type": result['userType']}), 200)
+        return make_response(jsonify({"email": result['email']}), 200)
 
 
-app.run(host='0.0.0.0', port=81)
+app.run(host='0.0.0.0', port=8000, debug=True)
