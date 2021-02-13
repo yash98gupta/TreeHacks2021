@@ -19,6 +19,30 @@ def ping():
     return "Hello World"
 
 
+@app.route('/signup', methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
+def signup():
+    db_collection = db["users"]
+    user_json = request.get_json()
+
+    # {"email": "yash@usc.edu", "name": "Yash","gender": "M", "contact": "4443128878"}
+
+    email = user_json['email']  # xyz@xyz.com
+    name = user_json['name']  # Varun Shanbhag
+    gender = user_json['gender']  # M/F
+    contact = user_json['contact']  # 3123129988
+
+    mydict = {"email": email, "name": name,
+              "gender": gender, "contact": contact}
+
+    result = db_collection.insert_one(mydict)
+
+    if result.inserted_id is None:
+        return make_response(jsonify({"Error": "Something went wrong"}), 400)
+    else:
+        return make_response(jsonify({"Message": "Event Enterend"}), 200)
+
+
 @app.route('/login', methods=['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def login():
@@ -51,6 +75,8 @@ def events():
 def add_events():
     db_collection = db["events"]
     user_json = request.get_json()
+
+    #{"event": "Table Tennis", "event_category": "Sports","lat": "37.4216", "lon": "122.1838", "time": "16:00-18:00", "user": "yash@usc.edu"}
 
     event = user_json['event']  # Golf
     event_category = user_json['event_category']  # Sports
