@@ -40,7 +40,7 @@ def signup():
     if result.inserted_id is None:
         return make_response(jsonify({"Error": "Something went wrong"}), 400)
     else:
-        return make_response(jsonify({"Message": "Event Enterend"}), 200)
+        return make_response(jsonify({"Message": "Signup Completed"}), 200)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -95,6 +95,29 @@ def add_events():
         return make_response(jsonify({"Error": "Something went wrong"}), 400)
     else:
         return make_response(jsonify({"Message": "Event Enterend"}), 200)
+
+
+@app.route('/requestevent', methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
+def requestevent():
+    db_collection = db["req"]
+    user_json = request.get_json()
+
+    # {"event": "123", "owner": "test@test.com","requester": "varun@iit.edu"}
+
+    event = user_json['event']  # event_id
+    owner = user_json['owner']  # xyz@xyz.com
+    requester = user_json['requester']  # self_email
+
+    mydict = {"event": event, "owner": owner,
+              "requester": requester, "decision": ""}
+
+    result = db_collection.insert_one(mydict)
+
+    if result.inserted_id is None:
+        return make_response(jsonify({"Error": "Something went wrong"}), 400)
+    else:
+        return make_response(jsonify({"Message": "Request Sent"}), 200)
 
 
 app.run(host='0.0.0.0', port=8080, debug=True)
