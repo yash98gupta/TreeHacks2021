@@ -141,4 +141,27 @@ def eventdecision():
         return make_response(jsonify({"Error": "Something went wrong"}), 400)
 
 
+@app.route('/getrequestforeventid', methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
+def getrequestforeventid():
+    db_collection = db["req"]
+    user_json = request.get_json()
+    # {"event": "123"}
+    event = user_json['event']  # event_id
+    result = db_collection.find({"event": event})
+    return make_response(dumps(result), 200)
+
+
+@app.route('/getrequestforuser', methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
+def getrequestforuser():
+    db_collection = db["req"]
+    user_json = request.get_json()
+    # {"owner": "varun@iit.edu"}
+    owner = user_json['owner']  # varun@iit.edu
+    result = db_collection.find({"owner": owner})
+    result = list(result)
+    return make_response(dumps(result), 200)
+
+
 app.run(host='0.0.0.0', port=8080, debug=True)
