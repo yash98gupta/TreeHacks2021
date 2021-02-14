@@ -3,6 +3,7 @@ from flask import Flask
 from flask import jsonify, make_response, request
 from flask_cors import CORS, cross_origin
 from bson.json_util import dumps
+from geopy.geocoders import Nominatim
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -17,6 +18,17 @@ db = client["TreeHacks"]
 @app.route("/ping")
 def ping():
     return "Hello World"
+
+
+@app.route("/location", methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
+def location():
+    user_json = request.get_json()
+    #{"location": "Stanford Golf Course"}
+    location = user_json['location']
+    geolocator = Nominatim(user_agent="TreeHacks")
+    result = geolocator.geocode(location)
+    return make_response(jsonify({"lat": result.latitude, "lon": result.longitude}), 200)
 
 
 @app.route('/signup', methods=['POST', 'GET'])
