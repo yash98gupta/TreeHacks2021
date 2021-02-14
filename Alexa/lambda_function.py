@@ -24,27 +24,38 @@ def launch_request_handler(handler_input):
     """
     Invoked after launching Alexa.
 
-    Say: Alexa launch get together
+    Say: 'Alexa launch get together'
     """
-    speech_text = "Hello Tushar! Are you looking to connect and play with others?"
+    speech_text = "Hello! Are you looking to connect and play with others?"
     handler_input.response_builder.speak(speech_text).set_card(
-        SimpleCard("Hello Tushar! Are you looking to connect and play with others?", speech_text)).set_should_end_session(False)
+        SimpleCard("Hello! Are you looking to connect and play with others?", speech_text)).set_should_end_session(False)
     return handler_input.response_builder.response
 
 # find_events
 @sb.request_handler(can_handle_func=is_intent_name("find_events"))
 def find_events(handler_input):
-    
-    events_list = requests.get("http://3.17.148.9:8080/events")
+    """
+    Search all the events happening near the user.
+
+    Say: 'Alexa tell me about current events.'
+    """
+
     length = 0
 
+    events_list = requests.get("http://3.17.148.9:8080/events")
+
+    # check for response code from server
     if events_list.status_code == 200:
         events_list = events_list.content
         details = json.loads(events_list.decode('utf-8'))
         length = len(details)
 
+    # store count of every event
     events = dict()
-    text = ""
+
+    # generate response text
+    response_text = ""
+
     for i in range(length):
         cat = details[i]['event_category']
         if cat not in events:
@@ -53,24 +64,27 @@ def find_events(handler_input):
             events[cat] += 1
     
     for event, count  in events.items():
-        text += str(count) + " " + event+", "
-    print(text)
-    speech_text = "I found {} events.".format(text)
+        response_text += str(count) + " " + event+", "
+
+    speech_text = "I found {} events.".format(response_text)
     handler_input.response_builder.speak(speech_text).set_card(
-    SimpleCard("I found 10 events near me.", speech_text)).set_should_end_session(False)
+    SimpleCard("I found {} events.".format(response_text), speech_text)).set_should_end_session(False)
     return handler_input.response_builder.response
 
 # event_detail
 @sb.request_handler(can_handle_func=is_intent_name("event_detail"))
 def find_events(handler_input):
     
-    slots = handler_input.request_envelope.request.intent.slots
+    """
+    Select a specific event from the list mentioned in previous flow.
 
-    # print("****")
-    # print(slots['event_cat'].resolutions.resolutions_per_authority[0].values[0])
-    # print(slots['event_cat'].resolutions.resolutions_per_authority[0].values[0].value.name)
-    # print("****")
+    Say: 'Alexa tell me more about sports'
+    """
+    
+    slots = handler_input.request_envelope.request.intent.slots
+    
     selected_event = slots['event_cat'].resolutions.resolutions_per_authority[0].values[0].value.name
+    
     events_list = requests.get("http://3.17.148.9:8080/events")
     length = 0
 
@@ -78,9 +92,9 @@ def find_events(handler_input):
         events_list = events_list.content
         details = json.loads(events_list.decode('utf-8'))
         length = len(details)
-    print("selected: ", selected_event)
+
     events = dict()
-    text = ""
+    response_text = ""
     for i in range(length):
         if details[i]["event_category"].lower() == selected_event:
             cat = details[i]['event']
@@ -88,22 +102,24 @@ def find_events(handler_input):
                 events[cat] = 1
             else:
                 events[cat] += 1
-    print(dict)
-    
-    activity = {"playing": ["sports", "esports"], "hiking": ['']}
+        
     for event, count  in events.items():
-        text += str(count) +  + event+", "
+        response_text += str(count) +  + event+", "
 
-    speech_text = "I found {}".format(text)
+    speech_text = "I found {}".format(response_text)
     handler_input.response_builder.speak(speech_text).set_card(
-    SimpleCard("I found {}".format(text), speech_text)).set_should_end_session(False)
+    SimpleCard("I found {}".format(response_text), speech_text)).set_should_end_session(False)
     return handler_input.response_builder.response
 
 
 # select_event
 @sb.request_handler(can_handle_func=is_intent_name("select_event"))
 def find_events(handler_input):
-    
+    """
+    Finalize the event
+
+    Say: 'Alexa book footbal'
+    """
     slots = handler_input.request_envelope.request.intent.slots
 
     selected_sport = slots['sports'].resolutions.resolutions_per_authority[0].values[0].value.name
