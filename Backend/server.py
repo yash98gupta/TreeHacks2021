@@ -155,11 +155,11 @@ def getrequestforeventid():
 @app.route('/getrequestforuser', methods=['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def getrequestforuser():
-    db_collection = db["req"]
+    db_collection = db["events"]
     user_json = request.get_json()
-    # {"owner": "varun@iit.edu"}
-    owner = user_json['owner']  # varun@iit.edu
-    result = db_collection.find({"owner": owner})
+    # {"user": "varun@iit.edu"}
+    user = user_json['user']  # varun@iit.edu
+    result = db_collection.find({"user": user})
     result = list(result)
     return make_response(dumps(result), 200)
 
