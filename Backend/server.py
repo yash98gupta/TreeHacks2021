@@ -103,7 +103,7 @@ def add_events():
     cord = geolocator.geocode(location)
     mydict = {"event": event, "event_category": event_category,
               "lat": cord.latitude, "lon": cord.longitude, "time": time,
-              "status": status, "user": user, "gender": gender}
+              "status": status, "user": user, "gender": gender, "location": location}
 
     result = db_collection.insert_one(mydict)
 
