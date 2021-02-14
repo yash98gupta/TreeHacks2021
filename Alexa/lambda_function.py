@@ -11,6 +11,7 @@ from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
 import requests
 import json
+import random
 
 sb = SkillBuilder()
 
@@ -138,6 +139,18 @@ def help_intent_handler(handler_input):
     speech_text = "You can say, tell me events happening near me or tell me about sports"
     handler_input.response_builder.speak(speech_text).set_card(SimpleCard("You can say", speech_text)).set_should_end_session(False)
     return handler_input.response_builder.response
+
+# stop_intent
+@sb.request_handler(can_handle_func=is_intent_name("AMAZON.StopIntent"))
+def stop_intent_handler(handler_input):
+
+	# ends current session
+
+	response = {1 : "See you, bye",  2 : "Bye-bye", 3: "Take care", 4 : "It was my pleasure"}
+	output = str(list(response.values())[random.randint(1,4)])
+	speech_text = "{}".format(output) 
+	handler_input.response_builder.speak(speech_text).set_card(SimpleCard("Good Bye!", speech_text)).set_should_end_session(True)
+	return handler_input.response_builder.response
 
 
 lambda_handler = sb.lambda_handler()
