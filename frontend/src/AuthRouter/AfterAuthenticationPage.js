@@ -76,7 +76,7 @@ loginSuccess=()=>{
 
         let avatar=null
         let flashMsg=null
-        let currentHead=`Connecti`
+        let currentHead=`GetTogether`
         
         if(this.state.flashMessage){
           currentHead=(

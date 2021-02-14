@@ -11,61 +11,46 @@ const initialState = {
 }
 
 const signUpSuccess=(state,action)=>{
-  // console.log("sigup success reached reducer",action.response.data);
-  // if(action.response.data.auth_token_valid){
       return updateObject(state,{
-          // token : action.response.data.auth_token,
-          token : '12345',
+          token : action.response.email,
           isAuth : true,
-          email: 'y@y.com'
-          // email : action.response.data.email,
+          email : action.response.email,
+          gender: action.response.gender,
+          name: action.response.name,
+          contact: action.response.contact
       })
-    // }else{
-    //   return updateObject(state,{
-    //     state:state,
-    //     errorMsg:`Please confirm your account by clicking the confirmation link sent at ${action.response.data.email}`
-    //   })
-    // }
 }
 
 const signUpFail=(state,action)=>{
-  // console.log(action.response.data.message);
-  // if(action.response.data.message){
-  //   return updateObject(state,{
-  //     errorMsg: action.response.data.message
-  //   })
-  // }else{
-  //   return updateObject(state,{
-  //     state:state
-  //   })
-  // }
-  console.log("Failed")
   return updateObject(state,{
     state:state
   })
 }
 
 const autoSignIn=(state,action)=>{
-  // console.log("Auto login success with new token value :",action.response.data.auth_token);
   return updateObject(state,{
-    // token : action.response.data.auth_token,
-    token : '12345',
+    token : action.response.email,
     isAuth : true,
-    email : 'y@y.com'
-    // email : action.response.data.email,
+    email : action.response.email,
+    gender : action.response.gender,
+    name : action.response.name,
+    contact : action.response.contact,
   })
 }
 
 const SignIn=(state,action)=>{
+  console.log(action.response.data)
   return updateObject(state,{
-    token : '12345',
+    token : action.response.data.email,
     isAuth : true,
-    email : action.response.data.email
+    email : action.response.data.email,
+    gender : action.response.data.gender,
+    name : action.response.data.name,
+    contact : action.response.data.contact
   })
 }
 
 const signInFail=(state,action)=>{
-  console.log(action.response.data.message);
   if(action.response.data.message){
     return updateObject(state,{
       errorMsgLogIn: action.response.data.message
@@ -78,7 +63,6 @@ const signInFail=(state,action)=>{
 }
 
 const signOutSuccess=(state,action)=>{
-  // console.log("logout success");
   return updateObject(state,{
       token : null,
       isAuth : false,

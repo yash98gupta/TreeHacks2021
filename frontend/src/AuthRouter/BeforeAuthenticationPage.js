@@ -16,7 +16,7 @@ class BeforeAuthenticationPage extends Component {
       height: '7vh'
     }
 
-    let currentHead=`Connecti`
+    let currentHead=`GetTogether`
 
     return (
       <BrowserRouter>

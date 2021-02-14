@@ -5,15 +5,14 @@ import axios , {setHeader} from '../../axios/axios-task'
 // CREATE USER
 export const createUserRequest = (newUserDetails) => {
     return dispatch => {
-        axios.post('/login',newUserDetails)
+        axios.post('/signup',newUserDetails)
             .then(
                 (response)=>{
-                    dispatch(userCreateSuccess(response))
+                    dispatch(userCreateSuccess(newUserDetails))
                 }
             )
             .catch(
                 (error)=>{
-                    console.log("Failed here",newUserDetails)
                     dispatch(userCreateFail(error))
                 }
             )
@@ -21,7 +20,10 @@ export const createUserRequest = (newUserDetails) => {
 }
 
 const userCreateSuccess = (response) => {
-    localStorage.setItem('token',response.data.auth_token);
+    localStorage.setItem('token',response.email);
+    localStorage.setItem('gender',response.gender)
+    localStorage.setItem('name',response.name)
+    localStorage.setItem('conatct',response.contact)
     setHeader()
     return{
         type : actionTypes.SIGN_UP_SUCCESSFUL,
@@ -30,7 +32,6 @@ const userCreateSuccess = (response) => {
 }
 
 const userCreateFail = (error) => {
-  console.log("sign_up failed",error);
     return{
         type: actionTypes.SIGN_UP_FAIL,
         response : error.response
@@ -41,45 +42,27 @@ const userCreateFail = (error) => {
 
 // AUTO SIGN_IN
  export const autoSignIn = (auth_token) => {
-    const token = {token : auth_token}
     return autoSignSuccesful('success')
-    // return dispatch => {
-        // axios.post('/auth/auto_login',token)
-        // .then(
-            // (response) => {
-                // dispatch(autoSignSuccesful(response))
-            // }
-        // )
-        // .catch(
-            // (error) => {
-                // dispatch(autoSignFail(error))
-            // }
-        // )
-    // }
 }
 
 const autoSignSuccesful = (response) => {
-    // localStorage.setItem('token',response.data.auth_token)
-    localStorage.setItem('token','12345')
+    localStorage.setItem('token',localStorage.getItem('token'))
+    localStorage.setItem('gender',localStorage.getItem('gender'))
+    localStorage.setItem('name',localStorage.getItem('name'))
+    localStorage.setItem('contact',localStorage.getItem('contact'))
+    let resp = {email: localStorage.getItem('token'),gender: localStorage.getItem('gender'), name: localStorage.getItem('name'), contact: localStorage.getItem('contact')}
     setHeader()
     return{
         type: actionTypes.AUTO_SIGN_IN_SUCCESSFUL,
-        response : response
-    }
-}
-
-const autoSignFail = (error) => {
-    return{
-        type : actionTypes.AUTO_SIGN_IN_FAIL,
-        response : error
+        response : resp
     }
 }
 
 // AUTO SIGN_IN END
 
 // SIGN IN
-export const signInUserRequest = (user,confirmation_token) => {
-  const token = {user : user, confirmation_token:confirmation_token}
+export const signInUserRequest = (user) => {
+  const token = {user : user}
     return dispatch => {
         axios.post('/login',token)
             .then(
@@ -96,7 +79,10 @@ export const signInUserRequest = (user,confirmation_token) => {
 }
 
 const signInSuccess = (response) => {
-    localStorage.setItem('token',response.data.auth_token)
+    localStorage.setItem('token',response.data.email)
+    localStorage.setItem('gender',response.data.gender)
+    localStorage.setItem('name',response.data.name)
+    localStorage.setItem('contact',response.data.contact)
     setHeader()
     return{
         type : actionTypes.SIGN_IN_SUCCESSFUL,
@@ -119,14 +105,11 @@ export const logOutUserRequest = (auth_token) => {
 
 const signOutSuccessful = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('gender')
+    localStorage.removeItem('name')
+    localStorage.removeItem('contact')
     return{
         type : actionTypes.SIGN_OUT_SUCCESSFUL
-    }
-}
-const signOutFail = (error) => {
-    return{
-        type : actionTypes.SIGN_OUT_FAIL,
-        response : error
     }
 }
 // LOGOUT END

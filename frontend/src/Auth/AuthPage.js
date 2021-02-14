@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Divider, Grid, Header,Icon,Segment,Form,Button } from 'semantic-ui-react'
-import {Input, TextArea, Select,Image } from 'semantic-ui-react'
+import {Input, Select} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import * as actionCreaters from '../store/actions/index'
 import axios from '../axios/axios-task';
@@ -20,9 +20,7 @@ class AuthPage extends Component {
       email:this.state.email,
       password:this.state.password
     }
-    let x = window.location.search;
-    let confirmation_token = x.replace("?confirmation_token=", "");
-    this.props.signInUser(user,confirmation_token)
+    this.props.signInUser(user)
   }
 
   handleChange=(e)=>{
@@ -65,8 +63,8 @@ class AuthPage extends Component {
   // SignUp functions below
 
   handleCreateUser=()=>{
-    let user = this.state.createUser
-    this.props.createUser(user)
+    let user = this.state.createUser;
+    this.props.createUser(user);
   }
 
   handleSignUpForm=(key,value)=>{
@@ -86,14 +84,13 @@ class AuthPage extends Component {
     }
 
     const genderOptions = [
-      { key: 'm', text: 'Male', value: 'male' },
-      { key: 'f', text: 'Female', value: 'female' },
+      { key: 'm', text: 'M', value: 'male' },
+      { key: 'f', text: 'F', value: 'female' },
     ]
 
 
       let submitButton = 'Sign Up'
-      let PasswordField = <Form.Input label="Password (minimum of 6 length)" type='password' placeholder='Password' onChange={(e)=>this.handleSignUpForm('password',e.target.value)} required="true" />
-      let confirmPassword = <Form.Input label="Confirm Password" type='password' placeholder='Confirm Password' onChange={(e)=>this.handleSignUpForm('confirmPassword',e.target.value)} required="true" />
+      let PasswordField = <Form.Input label="Password (minimum of 6 length)" type='password' placeholder='Password' onChange={(e)=>this.handleSignUpForm('password',e.target.value)} required={true} />
 
     let displayForm=null
     if(!this.state.forgotPassword){
@@ -104,11 +101,11 @@ class AuthPage extends Component {
           <Form onSubmit={this.handleSignInUser}>
             <Form.Field>
               <label>Email</label>
-              <input placeholder='Email' onChange={this.handleChange} required="true" />
+              <input placeholder='Email' onChange={this.handleChange} required={true} />
             </Form.Field>
             <Form.Field>
               <label>Password</label>
-              <input placeholder='password' type={'password'} onChange={this.handleChange} required="true" />
+              <input placeholder='password' type={'password'} onChange={this.handleChange} required={true} />
             </Form.Field>
             <Button type='submit'>Submit</Button>
             <p></p>
@@ -124,7 +121,7 @@ class AuthPage extends Component {
           <Form onSubmit={this.forgotPasswordRequest}>
             <Form.Field>
               <label>Email</label>
-              <input placeholder='Reset password Email' onChange={this.handlePasswordChange} value={this.state.forgotPasswordEmail} required="true" />
+              <input placeholder='Reset password Email' onChange={this.handlePasswordChange} value={this.state.forgotPasswordEmail} required={true} />
             </Form.Field>
             <Button type='submit'>Reset Password</Button>
             <p></p>
@@ -148,9 +145,9 @@ class AuthPage extends Component {
               <h1>SignUp</h1>
               <span style={{color:'red'}}>{this.props.errorMsg}</span>
               <Form.Group widths='equal'>
-                <Form.Field control={Input} label='First name' placeholder='First name' onChange={(e)=>this.handleSignUpForm('FirstName',e.target.value)} required="true" />
-                <Form.Field control={Input} label='Last name' placeholder='Last name' onChange={(e)=>this.handleSignUpForm('LastName',e.target.value)} required="true" />
-                <Form.Field control={Select} label='Gender' options={genderOptions} placeholder='Gender' onChange={(e)=>this.handleSignUpForm('Gender',e.target.textContent)} required="true" />
+                <Form.Field control={Input} label='Name' placeholder='Name' onChange={(e)=>this.handleSignUpForm('name',e.target.value)} required={true} />
+                <Form.Field control={Select} label='Gender' options={genderOptions} placeholder='Gender' onChange={(e)=>this.handleSignUpForm('gender',e.target.textContent)} required={true} />
+                <Form.Field control={Input} label='Contact' placeholder='Contact' onChange={(e)=>this.handleSignUpForm('contact',e.target.value)} required={true} />
               </Form.Group>
 
               <Form.Group widths='equal'>
@@ -160,12 +157,10 @@ class AuthPage extends Component {
                   label='Email'
                   placeholder='abc@example.com'
                   onChange={(e)=>this.handleSignUpForm('email',e.target.value)}
-                  required="true"
+                  required={true}
                 />
               </Form.Group>
-
                     {PasswordField}
-                    {confirmPassword}
                   <Button animated type="submit">
                     <Button.Content visible>{submitButton}<Icon name='user plus' size={'small'} /></Button.Content>
                     <Button.Content hidden>
