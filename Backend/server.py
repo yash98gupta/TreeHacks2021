@@ -4,6 +4,7 @@ from flask import jsonify, make_response, request
 from flask_cors import CORS, cross_origin
 from bson.json_util import dumps
 from geopy.geocoders import Nominatim
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -24,7 +25,7 @@ def ping():
 @cross_origin(supports_credentials=True)
 def location():
     user_json = request.get_json()
-    #{"location": "Stanford Golf Course"}
+    # {"location": "Stanford Golf Course"}
     location = user_json['location']
     geolocator = Nominatim(user_agent="TreeHacks")
     result = geolocator.geocode(location)
@@ -100,7 +101,7 @@ def add_events():
     db_collection = db["events"]
     user_json = request.get_json()
 
-    #{"event": "Table Tennis", "event_category": "Sports","lat": "37.4216", "lon": "122.1838", "time": "16:00-18:00", "user": "yash@usc.edu"}
+    # {"event": "Table Tennis", "event_category": "Sports","lat": "37.4216", "lon": "122.1838", "time": "16:00-18:00", "user": "yash@usc.edu"}
 
     event = user_json['event']  # Golf
     event_category = user_json['event_category']  # Sports
@@ -150,11 +151,11 @@ def eventdecision():
     db_collection = db["req"]
     user_json = request.get_json()
 
-    # {"event": "123", "decision": "Yes/No"}
-    event = user_json['event']  # event_id
+    # {"reqid":"232" "decision": "Yes/No"}
+    reqid = user_json['reqid']  # event_id
     decision = user_json['decision']  # Yes/No
 
-    myquery = {"event": event}
+    myquery = {"_id": ObjectId(reqid)}
     newvalues = {"$set": {"decision": decision}}
 
     result = db_collection.update_one(myquery, newvalues)
@@ -165,8 +166,8 @@ def eventdecision():
         return make_response(jsonify({"Error": "Something went wrong"}), 400)
 
 
-@app.route('/getrequestforeventid', methods=['POST', 'GET'])
-@cross_origin(supports_credentials=True)
+@ app.route('/getrequestforeventid', methods=['POST', 'GET'])
+@ cross_origin(supports_credentials=True)
 def getrequestforeventid():
     db_collection = db["req"]
     user_json = request.get_json()
