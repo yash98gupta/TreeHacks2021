@@ -60,7 +60,8 @@ def login():
     if result is None:
         return make_response(jsonify({"Error": "User Not Found"}), 400)
     else:
-        return make_response(jsonify({"email": result['email'], "gender": result['gender']}), 200)
+        return make_response(jsonify({"email": result['email'], "gender": result['gender'],
+                                      "contact": result['contact']}), 200)
 
 
 @app.route('/events', methods=['POST', 'GET'])
