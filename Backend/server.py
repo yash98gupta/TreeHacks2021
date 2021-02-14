@@ -4,6 +4,7 @@ from flask import jsonify, make_response, request
 from flask_cors import CORS, cross_origin
 from bson.json_util import dumps
 from geopy.geocoders import Nominatim
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -18,17 +19,6 @@ db = client["TreeHacks"]
 @app.route("/ping")
 def ping():
     return "Hello World"
-
-
-@app.route("/location", methods=['POST', 'GET'])
-@cross_origin(supports_credentials=True)
-def location():
-    user_json = request.get_json()
-    #{"location": "Stanford Golf Course"}
-    location = user_json['location']
-    geolocator = Nominatim(user_agent="TreeHacks")
-    result = geolocator.geocode(location)
-    return make_response(jsonify({"lat": result.latitude, "lon": result.longitude}), 200)
 
 
 @app.route('/signup', methods=['POST', 'GET'])
@@ -100,7 +90,7 @@ def add_events():
     db_collection = db["events"]
     user_json = request.get_json()
 
-    #{"event": "Table Tennis", "event_category": "Sports","lat": "37.4216", "lon": "122.1838", "time": "16:00-18:00", "user": "yash@usc.edu"}
+    # {"event": "Table Tennis", "event_category": "Sports","lat": "37.4216", "lon": "122.1838", "time": "16:00-18:00", "user": "yash@usc.edu"}
 
     event = user_json['event']  # Golf
     event_category = user_json['event_category']  # Sports
@@ -109,9 +99,11 @@ def add_events():
     time = user_json['time']  # 14:00-16:00
     status = "Active"
     user = user_json['user']  # email_id
-
+    location = user_json['location']
+    geolocator = Nominatim(user_agent="TreeHacks")
+    cord = geolocator.geocode(location)
     mydict = {"event": event, "event_category": event_category,
-              "lat": lat, "lon": lon, "time": time, "status": status, "user": user}
+              "lat": cord.latitude, "lon": cord.longitude, "time": time, "status": status, "user": user}
 
     result = db_collection.insert_one(mydict)
 
@@ -150,11 +142,11 @@ def eventdecision():
     db_collection = db["req"]
     user_json = request.get_json()
 
-    # {"event": "123", "decision": "Yes/No"}
-    event = user_json['event']  # event_id
+    # {"reqid":"232" "decision": "Yes/No"}
+    reqid = user_json['reqid']  # event_id
     decision = user_json['decision']  # Yes/No
 
-    myquery = {"event": event}
+    myquery = {"_id": ObjectId(reqid)}
     newvalues = {"$set": {"decision": decision}}
 
     result = db_collection.update_one(myquery, newvalues)
@@ -165,8 +157,8 @@ def eventdecision():
         return make_response(jsonify({"Error": "Something went wrong"}), 400)
 
 
-@app.route('/getrequestforeventid', methods=['POST', 'GET'])
-@cross_origin(supports_credentials=True)
+@ app.route('/getrequestforeventid', methods=['POST', 'GET'])
+@ cross_origin(supports_credentials=True)
 def getrequestforeventid():
     db_collection = db["req"]
     user_json = request.get_json()
