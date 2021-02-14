@@ -21,17 +21,6 @@ def ping():
     return "Hello World"
 
 
-@app.route("/location", methods=['POST', 'GET'])
-@cross_origin(supports_credentials=True)
-def location():
-    user_json = request.get_json()
-    # {"location": "Stanford Golf Course"}
-    location = user_json['location']
-    geolocator = Nominatim(user_agent="TreeHacks")
-    result = geolocator.geocode(location)
-    return make_response(jsonify({"lat": result.latitude, "lon": result.longitude}), 200)
-
-
 @app.route('/signup', methods=['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def signup():
