@@ -94,16 +94,16 @@ def add_events():
 
     event = user_json['event']  # Golf
     event_category = user_json['event_category']  # Sports
-    lat = user_json['lat']  # lattitude
-    lon = user_json['lon']  # longitude
     time = user_json['time']  # 14:00-16:00
     status = "Active"
     user = user_json['user']  # email_id
-    location = user_json['location']
+    location = user_json['location']  # Stanford golf Course
+    gender = user_json['gender']
     geolocator = Nominatim(user_agent="TreeHacks")
     cord = geolocator.geocode(location)
     mydict = {"event": event, "event_category": event_category,
-              "lat": cord.latitude, "lon": cord.longitude, "time": time, "status": status, "user": user}
+              "lat": cord.latitude, "lon": cord.longitude, "time": time,
+              "status": status, "user": user, "gender": gender}
 
     result = db_collection.insert_one(mydict)
 
