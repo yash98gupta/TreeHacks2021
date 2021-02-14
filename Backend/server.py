@@ -110,9 +110,11 @@ def add_events():
     time = user_json['time']  # 14:00-16:00
     status = "Active"
     user = user_json['user']  # email_id
-
+    location = user_json['location']
+    geolocator = Nominatim(user_agent="TreeHacks")
+    cord = geolocator.geocode(location)
     mydict = {"event": event, "event_category": event_category,
-              "lat": lat, "lon": lon, "time": time, "status": status, "user": user}
+              "lat": cord.latitude, "lon": cord.longitude, "time": time, "status": status, "user": user}
 
     result = db_collection.insert_one(mydict)
 
