@@ -135,8 +135,9 @@ def help_intent_handler(handler_input):
 
 	# when user doesn't know the function of bot 
 
-	speech_text = "You can say, tell me events happening near me or tell me about sports"
-	handler_input.response_builder.speak(speech_text).set_card(SimpleCard("You can say", speech_text)).set_should_end_session(False)
-	return handler_input.response_builder.response
+    speech_text = "You can say, tell me events happening near me or tell me about sports"
+    handler_input.response_builder.speak(speech_text).set_card(SimpleCard("You can say", speech_text)).set_should_end_session(False)
+    return handler_input.response_builder.response
+
 
 lambda_handler = sb.lambda_handler()
