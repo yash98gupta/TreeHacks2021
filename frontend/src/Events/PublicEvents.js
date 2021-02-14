@@ -55,20 +55,20 @@ class PublicEvents extends Component {
           if(this.props.alreadyRequested){
               eventList.push(
                 <Accordion fluid styled>
+                  <Label color='orange' ribbon style={{left:'-0.7vw'}}>{events[i].event_category}</Label>
                 <Accordion.Title active={activeIndex === events[i]._id.$oid} index={events[i]._id.$oid} onClick={this.handleClick}>
                     <Icon name='dropdown' />
                     {events[i].category}
                     <div style={{marginTop:'5px'}}>
-                        <span><Label color='blue' horizontal>{events[i].event}</Label></span>
-                        <span><Label color='blue' horizontal>{events[i].event_category}</Label></span>
-                        <span><Label color='blue' horizontal>{events[i].location}</Label></span>
-                        <span><Label color='blue' horizontal>{events[i].status}</Label></span>
-                        <span><Label color='blue' horizontal>{events[i].time}</Label></span>
-                        <span><Label color='blue' horizontal>{events[i].gender}</Label></span>
+                    <span><Label color='blue' image style={{margin:'2px'}}>Event<Label.Detail>{events[i].event}</Label.Detail></Label></span>
+                        <span><Label color='grey' image style={{margin:'2px'}}>Time<Label.Detail>{events[i].time}</Label.Detail></Label></span>
+                        <span><Label color='yellow' image style={{margin:'2px'}}>Location<Label.Detail>{events[i].location}</Label.Detail></Label></span>
+                        <span><Label color='olive' image style={{margin:'2px'}}>Gender<Label.Detail>{events[i].gender}</Label.Detail></Label></span>
+                        <span><Label color='green' image style={{margin:'2px'}}>Status<Label.Detail>{events[i].status}</Label.Detail></Label></span>
                     </div>
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === events[i]._id.$oid}>
-                    <p>You Have Already Requested</p>
+                    <p>Request Sent</p>
                 </Accordion.Content>
                 </Accordion>
             )
@@ -98,13 +98,11 @@ class PublicEvents extends Component {
 
               eventList.push(
                 <Accordion fluid styled style={{width:'85%'}}>
-                  <Label as='a' color='orange' ribbon style={{left:'-0.7vw'}}>{events[i].event_category}</Label>
+                  <Label color='orange' ribbon style={{left:'-0.7vw'}}>{events[i].event_category}</Label>
                 <Accordion.Title active={activeIndex === events[i]._id.$oid} index={events[i]._id.$oid} onClick={this.handleClick}>
                     <Icon name='dropdown' />
-                    {events[i].event}
                     <div style={{marginTop:'5px'}}>
-                        {/* <span><Label color='blue' horizontal>{events[i].event}</Label></span> */}
-                        <span><Label color='blue' image style={{margin:'2px'}}>Name<Label.Detail>{events[i].event}</Label.Detail></Label></span>
+                        <span><Label color='blue' image style={{margin:'2px'}}>Event<Label.Detail>{events[i].event}</Label.Detail></Label></span>
                         <span><Label color='grey' image style={{margin:'2px'}}>Time<Label.Detail>{events[i].time}</Label.Detail></Label></span>
                         <span><Label color='yellow' image style={{margin:'2px'}}>Location<Label.Detail>{events[i].location}</Label.Detail></Label></span>
                         <span><Label color='olive' image style={{margin:'2px'}}>Gender<Label.Detail>{events[i].gender}</Label.Detail></Label></span>
