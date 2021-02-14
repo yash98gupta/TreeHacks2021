@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actionCreaters from '../store/actions/index'
-import {Icon,Button} from 'semantic-ui-react'
+import {Icon,Button,Label} from 'semantic-ui-react'
 
 class EventRequest extends Component {
 
@@ -18,7 +18,7 @@ class EventRequest extends Component {
   render() {
 
     let invitations = this.props.invitations
-    console.log(invitations)
+    let display = null;
     let pendingRequests=[];
     let approvedRequests=[];
     if(invitations != null && invitations.length != 0){
@@ -28,7 +28,7 @@ class EventRequest extends Component {
           pendingRequests.push(
             <div style={{display:'inline-flex',width: '35%',justifyContent: 'flex-start',marginRight: '65%', marginBottom: '2%'}}>
               <div style={{position:'relative',top:'1vh'}}>{invitations[i].requester}</div>
-              <div style={{left:'20vw', position:'absolute'}}>
+              <div style={{left:'42vw', position:'absolute'}}>
                 <Button.Group>
                   <Button positive animated='fade' style={{margin:'0px', padding:'0px', width:'90%'}}>
                     <Button.Content  visible style={{ padding: '0px',margin: '0px',top: '0px'}}>Accept</Button.Content>
@@ -45,7 +45,7 @@ class EventRequest extends Component {
           )
         }else if(invitations[i].decision == 'Yes'){
           approvedRequests.push(
-            <p>You have approved {invitations[i].requester} request</p>
+            <Label as='a' color='teal' image>{invitations[i].requester}</Label>
           )
         }
       }
@@ -53,11 +53,17 @@ class EventRequest extends Component {
       pendingRequests = 'No Requests'
     }
 
+    if(approvedRequests.length != 0){
+      display=(
+        <p>Approved: {approvedRequests}</p>
+      )
+    }
+
 
     return (
         <div>
           {pendingRequests}
-          {approvedRequests}
+          {display}
         </div>
     )
   }

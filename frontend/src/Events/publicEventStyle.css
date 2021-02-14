@@ -1,0 +1,23 @@
+.interestedModal button{
+    padding: 0px;
+}
+
+.ui.fade.animated.button .visible.content{
+    padding: 0px;
+}
+
+.ui.fade.animated.button .hidden.content{
+    padding: 0px;
+}
+
+.ui.fluid.accordion, .ui.fluid.accordion .accordion{
+    margin-bottom: 25px;
+    margin-left: 18px;
+    width: 85%;
+}
+
+.scrollPublicHide::-webkit-scrollbar {
+    display: none;
+}
+
+

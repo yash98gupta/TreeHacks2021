@@ -1,0 +1,3 @@
+.scrollPvtHide::-webkit-scrollbar {
+    display: none;
+}

@@ -78,7 +78,7 @@ export default class PlaceholderExampleCard extends Component {
       cardDisplay = (
       <Card.Group doubling itemsPerRow={3} stackable>
       {_.map(Femalecard, (card) => (
-        <Card key={card.header}>
+        <Card key={this.props.name}>
           {loading ? (
             <Placeholder>
               <Placeholder.Image square />
@@ -100,9 +100,9 @@ export default class PlaceholderExampleCard extends Component {
               </Placeholder>
             ) : (
               <>
-                <Card.Header>{card.header}</Card.Header>
-                <Card.Meta>{card.date}</Card.Meta>
-                <Card.Description>{card.description}</Card.Description>
+                <Card.Header>{this.props.name}</Card.Header>
+                <Card.Meta>{this.props.email}</Card.Meta>
+                <Card.Description>{this.props.conatct}</Card.Description>
               </>
             )}
           </Card.Content>

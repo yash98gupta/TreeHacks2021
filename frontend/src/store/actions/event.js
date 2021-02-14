@@ -87,7 +87,7 @@ export const acceptDeclineReq =(acceptDeclineReq) =>{
         axios.post('/eventdecision',acceptDeclineReq)
             .then(
                 (response)=>{
-                    dispatch(acceptDeclineReqSuccess(response))
+                    dispatch(acceptDeclineReqSuccess(acceptDeclineReq))
                 }
             )
             .catch(
@@ -114,6 +114,7 @@ const acceptDeclineReqFail = (error) => {
 
 // CHECK IF A EVENT WAS REQUESTED
 export const checkRequest =(eventId) =>{
+    console.log(eventId);
     return dispatch => {
         axios.post('/getrequestforeventid',eventId)
             .then(

@@ -4,7 +4,8 @@ import {updateObject} from '../utility'
 const initialState = {
     public_event : null,
     categories : null,
-    events : null
+    events : null,
+    alreadyRequested: false
 }
 
 
@@ -60,10 +61,7 @@ const handleRemoveFilter = (state,action)=>{
 
 const ReqInterestedSuccess = (state,action)=>{
   return updateObject(state,{
-    public_event : state.events,
-    categories: state.categories,
-    filteredCategory: state.filteredCategory,
-    events: state.events
+    alreadyRequested: true
   })
 }
 
@@ -77,11 +75,18 @@ const ReqInterestedFail = (state,action)=>{
 }
 
 const ReqAcceptDeclineSuccess = (state,action)=>{
+  console.log("hello",action.response.reqid);
+  let i;
+  let updatedRequester=[];
+  for(i=0;i<state.requesterEvent.length;i++){
+    let copyRequester = state.requesterEvent[i];
+    if(state.requesterEvent[i]._id.$oid == action.response.reqid){
+      copyRequester.decision = 'Yes'
+    }
+    updatedRequester.push(copyRequester);
+  }
   return updateObject(state,{
-    public_event : state.events,
-    categories: state.categories,
-    filteredCategory: state.filteredCategory,
-    events: state.events
+    requesterEvent: updatedRequester
   })
 }
 
@@ -108,33 +113,40 @@ const fetchPvtEventFail=(state,action)=>{
 }
 
 const checkRequestSuccess = (state,action)=>{
-  let pvt_event=[]
-  let requesterEvent = null
+  let requesterEvent = null;
+  let alreadyRequested = false;
   if(action.response.data.length == 0){
     requesterEvent = null
   }else{
     requesterEvent = action.response.data
     let i;
     let j;
-    for(i=0;i<state.private_event.length;i++){
-      let copyPvtEvent = state.private_event[i]
-      for(j=0;j<requesterEvent.length;j++){
-        let eventReq = []
-        if(state.private_event[i]._id.$oid == requesterEvent[j].event){
-          eventReq.push({requester : requesterEvent[j].requester,decision : requesterEvent[j].decision});
+    for(i=0;i<requesterEvent.length;i++){
+      if(requesterEvent[i].requester == localStorage.getItem('token')){
+        alreadyRequested = true;
+        break;
+      }
+    }
+    if(state.private_event != undefined){
+      for(i=0;i<state.private_event.length;i++){
+        let copyPvtEvent = state.private_event[i]
+        for(j=0;j<requesterEvent.length;j++){
+          let eventReq = []
+          if(state.private_event[i]._id.$oid == requesterEvent[j].event){
+            eventReq.push({requester : requesterEvent[j].requester,decision : requesterEvent[j].decision});
+          }
+          copyPvtEvent.eventReq = eventReq
         }
-        copyPvtEvent.eventReq = eventReq
-        pvt_event.push(copyPvtEvent);
       }
     }
   }
+
+
   return updateObject(state,{
-    public_event : state.events,
-    categories: state.categories,
-    filteredCategory: state.filteredCategory,
     events: state.events,
-    requesterEvent: requesterEvent
-  })
+    requesterEvent: requesterEvent,
+    alreadyRequested: alreadyRequested
+  });
 }
 const checkRequestFail = (state,action)=>{
   return updateObject(state,{

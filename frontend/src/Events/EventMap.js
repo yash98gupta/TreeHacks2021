@@ -3,7 +3,7 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker} from 'google-maps-react';
 
 const mapStyles = {
   width: '60vw',
-  height: '92vh'
+  height: '84vh'
 };
 
 export class EventMap extends Component {

@@ -44,7 +44,7 @@ class Filter extends Component {
     }
 
     return (
-        <div>
+        <div style={{display: 'inline',marginLeft: '6.2vw'}}>
             {category_filter}
             <Button content='Remove Filter' onClick={(e)=>this.props.handleRemoveFilter()}/>
         </div>

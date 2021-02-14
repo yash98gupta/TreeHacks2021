@@ -23,7 +23,7 @@ const userCreateSuccess = (response) => {
     localStorage.setItem('token',response.email);
     localStorage.setItem('gender',response.gender)
     localStorage.setItem('name',response.name)
-    localStorage.setItem('conatct',response.contact)
+    localStorage.setItem('contact',response.contact)
     setHeader()
     return{
         type : actionTypes.SIGN_UP_SUCCESSFUL,

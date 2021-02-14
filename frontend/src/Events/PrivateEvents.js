@@ -3,6 +3,7 @@ import * as actionCreaters from '../store/actions/index'
 import {connect} from 'react-redux'
 import { Accordion, Icon,Label,} from 'semantic-ui-react'
 import EventRequest from './EventRequest'
+import './privateEventStyle.css'
 
 class PrivateEvents extends Component {
 
@@ -48,17 +49,16 @@ class PrivateEvents extends Component {
         for(i=0;i<events.length;i++){
         eventList.push(
             <Accordion fluid styled>
+              <Label as='a' color='orange' ribbon style={{left:'-0.7vw'}}>{events[i].event_category}</Label>
             <Accordion.Title active={activeIndex === events[i]._id.$oid} index={events[i]._id.$oid} onClick={this.handleClick}>
                 <Icon name='dropdown' />
                 {events[i].category}
                 <div style={{marginTop:'5px'}}>
-                    <span><Label color='blue' horizontal>{events[i].event}</Label></span>
-                    <span><Label color='blue' horizontal>{events[i].event_category}</Label></span>
-                    <span><Label color='blue' horizontal>{events[i].lat}</Label></span>
-                    <span><Label color='blue' horizontal>{events[i].lon}</Label></span>
-                    <span><Label color='blue' horizontal>{events[i].status}</Label></span>
-                    <span><Label color='blue' horizontal>{events[i].time}</Label></span>
-                    <span><Label color='blue' horizontal>{events[i].user}</Label></span>
+                    <span><Label color='blue' image style={{margin:'2px'}}>Name<Label.Detail>{events[i].event}</Label.Detail></Label></span>
+                    <span><Label color='grey' image style={{margin:'2px'}}>Time<Label.Detail>{events[i].time}</Label.Detail></Label></span>
+                    <span><Label color='yellow' image style={{margin:'2px'}}>Location<Label.Detail>{events[i].location}</Label.Detail></Label></span>
+                    <span><Label color='olive' image style={{margin:'2px'}}>Gender<Label.Detail>{events[i].gender}</Label.Detail></Label></span>
+                    <span><Label color='green' image style={{margin:'2px'}}>Status<Label.Detail>{events[i].status}</Label.Detail></Label></span>
                 </div>
             </Accordion.Title>
             <Accordion.Content active={activeIndex === events[i]._id.$oid}>
@@ -76,8 +76,11 @@ class PrivateEvents extends Component {
     }
 
     return (
-      <div>
-        {eventList}
+      <div style={{marginLeft: '30%',marginRight: '30%'}}>
+        <h2>My Events</h2>
+        <div className="scrollPvtHide" style={{overflowY:'scroll', overflowX:'hidden', height:'83vh'}}>
+          {eventList}
+        </div>
       </div>
     )
   }

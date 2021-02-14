@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import * as actionCreaters from '../store/actions/index'
-import {Form,Button} from 'semantic-ui-react'
+import {Form,Table} from 'semantic-ui-react'
+import ModalSubmit from './ModalSubmit'
 
 class postEventForm extends Component {
 
   state={}
 
-  handleCreateEvent=()=>{
+  handleCreateEvent(params){
     let eventDetail = this.state;
     eventDetail.user = this.props.email;
     eventDetail.gender = this.props.gender;
+
     this.props.createEvent(eventDetail);
+
+    this.setState({
+      event: '',
+      event_category: '',
+      location: '',
+      time: ''
+    })
   }
 
   handleChangeEvent=(e)=>{
@@ -36,29 +45,49 @@ class postEventForm extends Component {
 
   render(){
 
-    // #{"event": "Table Tennis", "event_category": "Sports","lat": "37.4216", "lon": "122.1838", "time": "16:00-18:00", "user": "yash@usc.edu"}
-
+    let eventContent=(
+    <Table definition>
+      <Table.Body>
+        <Table.Row>
+            <Table.Cell width={2}>Name</Table.Cell>
+            <Table.Cell>{this.state.event}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+            <Table.Cell>Category</Table.Cell>
+            <Table.Cell>{this.state.event_category}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+            <Table.Cell>Location</Table.Cell>
+            <Table.Cell>{this.state.location}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+            <Table.Cell>Time</Table.Cell>
+            <Table.Cell>{this.state.time}</Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table>
+  )
     let eventForm=(
       <div>
         <h1>Create Event</h1>
-        <Form onSubmit={this.handleCreateEvent}>
+        <Form>
           <Form.Field>
             <label>Event Name</label>
-            <input placeholder='Name' onChange={this.handleChangeEvent} />
+            <input placeholder='Name' onChange={this.handleChangeEvent} value={this.state.event} required={true}/>
           </Form.Field>
           <Form.Field>
             <label>Event Category</label>
-            <input placeholder='Category' onChange={this.handleChangeEvent} />
+            <input placeholder='Category' onChange={this.handleChangeEvent} value={this.state.event_category} required={true}/>
           </Form.Field>
           <Form.Field>
             <label>Location</label>
-            <input placeholder='location' onChange={this.handleChangeEvent} />
+            <input placeholder='location' onChange={this.handleChangeEvent} value={this.state.location} required={true}/>
           </Form.Field>
           <Form.Field>
             <label>Time</label>
-            <input placeholder='Time' onChange={this.handleChangeEvent} />
+            <input placeholder='Time' onChange={this.handleChangeEvent} value={this.state.time} required={true}/>
           </Form.Field>
-          <Button type='submit'>Post Event</Button>
+          <ModalSubmit buttonName ='Create' buttonIcon='add' eventHeader={"Please confirm event details!"} eventVerify={eventContent} event={this.state} approvedDetails={(param)=> this.handleCreateEvent(param)} decline='Edit' accept='Approve'/>
         </Form>
       </div>
     )

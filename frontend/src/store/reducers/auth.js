@@ -11,6 +11,7 @@ const initialState = {
 }
 
 const signUpSuccess=(state,action)=>{
+  console.log("console",action.response)
       return updateObject(state,{
           token : action.response.email,
           isAuth : true,

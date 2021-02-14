@@ -21,7 +21,6 @@ class AfterAuthenticationPage extends Component {
   }
 
   handleDropdown=(e)=>{
-    console.log(e.target.textContent,"value is here");
     if(e.target.textContent=='Logout'){
       this.handleLogout()
     }else if (e.target.textAlign=='My Profile') {
@@ -37,7 +36,7 @@ loginSuccess=()=>{
           })
       }
       .bind(this),
-      3000
+      1500
   );
 }
 
@@ -49,18 +48,30 @@ loginSuccess=()=>{
 
         const navStyle={
           textAlign: 'center',
-          background: '#fd4400',
+          background: '#D2691E',
           paddingTop: '2.5vh',
           marginBottom: '3px',
-          height: '7vh'
+          height: '9.5vh'
         }
 
         const avatarStyle={
-          top:'2vh',
+          top:'3.6vh',
           display: 'inline-flex',
           position: 'absolute',
           alignItems: 'center',
-          right:'3%'
+          right:'2%',
+        }
+
+        const websiteName={
+          fontSize: '55px',
+          fontWeight: 'bolder',
+          zIndex: '100',
+          position: 'absolute',
+          left: '8vw',
+          fontFamily: 'sans-serif',
+          fontStyle: 'italic',
+          top: '3.3vh',
+          fontStretch: 'extra-expanded'
         }
 
         const userNameStyle={
@@ -70,8 +81,9 @@ loginSuccess=()=>{
         }
 
         const options = [
-          { key: 1, text: 'My Profile', value:1 ,as: Link, to:'/profile'},
-          { key: 2, text: 'Logout', value: 2 }
+          { key: 1, text: 'Dashboard', value:1 ,as: Link, to:'/'},
+          { key: 2, text: 'Profile', value:1 ,as: Link, to:'/'},
+          { key: 3, text: 'Logout', value: 2 }
         ]
 
         let avatar=null
@@ -80,18 +92,23 @@ loginSuccess=()=>{
         
         if(this.state.flashMessage){
           currentHead=(
-              <Message style={{position:'absolute',top:'-7px', width:'100vw', zIndex:'1200', background:'orange', color:'white'}}>
+              <Message style={{position:'absolute',top:'-7vh', left:'-8vw', width:'100vw', zIndex:'1200', background:'orange', color:'white', padding:'30px'}}>
                 <Message.Header>Login Successful</Message.Header>
               </Message>
           )
+        }
+        let profilePic = <Image src='/images/male.png' circular style={{width:'55px',marginRight:'1vw'}} />
+
+        if(this.props.gender == 'F'){
+          profilePic = <Image src='/images/female.jpg' circular style={{width:'55px',marginRight:'1vw'}} />
         }
 
         if(this.props.isAuth){
           avatar=(
             <div style={avatarStyle}>
-              <Image src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular style={{width:'50px',marginRight:'1vw'}} />
               <Menu compact style={userNameStyle}>
-                <Dropdown text='User' options={options} simple item onChange={(e)=>this.handleDropdown(e)} />
+                {profilePic}
+                <Dropdown text={this.props.name} options={options} simple item onChange={(e)=>this.handleDropdown(e)} />
               </Menu>
             </div>
           )
@@ -99,16 +116,17 @@ loginSuccess=()=>{
 
     return (
       <BrowserRouter>
-      <div>
+      <div style={{ background: "#f5f5f5", height: "100vh",width: "100vw",margin: "0px", padding: "0px"}}>
          <div style={navStyle}>
          <div>
-            <span style={{fontSize:'30px',fontWeight:'bolder', zIndex:100}}>{currentHead}</span>
-            {avatar}
-          </div>
-          <div style={{zIndex:1000, marginTop:'0.6vh'}}>
-            <Link to='/' style={{color:'black',marginRight:'8px',fontSize:'15px',top:'-1vh',position:'relative'}}>Dashboard</Link>
-          </div>
+            <div>
+                <Image src='/images/gt.png' circular style={{marginRight:'1vw',width: '32vh',top: '-3vw',display: 'inline-block',left: '-4vw',position: 'absolute'}}/>
+                <Link to='/' style={{textDecoration:'none', color:'black'}}><span style={websiteName}>{currentHead}</span></Link>
+              </div>
+              {avatar}
+            </div>
          </div>
+         <br />
            <Switch>
                <Route  path='/public_events' component={publicEvents} />
                <Route  path='/private_events' component={privateEvents} />
@@ -123,7 +141,9 @@ loginSuccess=()=>{
 const mapPropsToState = (state) => {
   return{
     isAuth : state.auth.isAuth,
-    email : state.auth.email
+    email : state.auth.email,
+    gender: state.auth.gender,
+    name: state.auth.name
   }
 }
 
